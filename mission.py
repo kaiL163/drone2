@@ -1,18 +1,38 @@
-import cv2
-from robomaster import robot
+import time
+from djitellopy import Tello
 
 def run_mission(tl_drone):
-    tl_flight = tl_drone.flight
+    tl_drone.enable_mission_pads()
+    tl_drone.set_mission_pad_detection_direction(2)
 
-    tl_flight.mission_pad_on()
+    tl_drone.takeoff()
 
-    tl_flight.takeoff().wait_for_completed()
+    tl_drone.move_left(100)
 
-    tl_flight.go(x=100, y=0, z=0, mid="")
-    tl_flight.go(x=0, y=-150, z=0, mid="")
-    tl_flight.go(x=-100, y=0, z=0, mid="")
-    tl_flight.go(x=100, y=150, z=0, mid="")
+    tl_drone.move_forward(100)
+    tl_drone.go_xyz_speed_mid(0, 0, 120, 50, 1)
+    tl_drone.move_forward(100)
+    tl_drone.go_xyz_speed_mid(0, 0, 120, 50, 1)
+    tl_drone.move_forward(100)
+    tl_drone.go_xyz_speed_mid(0, 0, 120, 50, 1)
 
-    tl_flight.land().wait_for_completed()
+    tl_drone.move_right(100)
+    tl_drone.go_xyz_speed_mid(0, 0, 120, 50, 1)
+    tl_drone.move_right(100)
+    tl_drone.go_xyz_speed_mid(0, 0, 120, 50, 1)
 
-    tl_flight.mission_pad_off()
+    tl_drone.move_back(100)
+    tl_drone.go_xyz_speed_mid(0, 0, 120, 50, 1)
+
+    time.sleep(3)
+
+    tl_drone.move_left(100)
+    tl_drone.go_xyz_speed_mid(0, 0, 120, 50, 1)
+
+    time.sleep(3)
+
+    tl_drone.go_xyz_speed(100, -50, 50, 50)
+
+    tl_drone.land()
+
+    tl_drone.disable_mission_pads()

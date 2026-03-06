@@ -1,18 +1,12 @@
 import cv2
-from robomaster import robot
 
 def run_camera(tl_drone, stop):
-    tl_camera = tl_drone.camera
-    tl_camera.start_video_stream(display=False)
-    tl_camera.set_fps("high")
-    tl_camera.set_resolution("high")
-    tl_camera.set_bitrate(6)
-    
+    frame_read = tl_drone.get_frame_read()
+
     while not stop.is_set():
-        img = tl_camera.read_cv2_image()
+        img = frame_read.frame
         cv2.imshow("Drone", img)
-        cv2.waitKey(1)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
     cv2.destroyAllWindows()
-    tl_camera.stop_video_stream()
-    
